@@ -1,0 +1,12 @@
+applications:
+- path: .
+  memory: 512M
+  instances: 1
+  domain: mybluemix.net
+  name: assembly-nlu-nlc
+  host: assembly-nlu-nlc
+  disk_quota: 1024M
+  services:
+  - assembly-demo-nlc
+  - assembly-demo-nlu
+  - assembly-nlu-nlc-cloudantNoSQLDB
