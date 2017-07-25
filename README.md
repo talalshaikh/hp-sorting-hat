@@ -8,6 +8,10 @@ Bluemix with only a couple clicks. Try it out for yourself right now by clicking
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/ibmets/node-red-bluemix-starter.git)
 
+You can also see the sample working demo by changing your directory to 
+`assembly-nlu-nlc` and then using `bx app push` to push the code 
+to bluemix.
+
 ### How does this work?
 
 When you click the button, you are taken to Bluemix where you get a pick a name
@@ -32,8 +36,12 @@ Node-RED runs.
 
 Add and Bind the following services to the application:
 
-    * Natural Language Understanding
-    * Natural Language Classifier
+    Natural Language Understanding
+    Natural Language Classifier
+    
+You can do that by heading over to the catalog, and going to Watson services, and
+selecting the desired service. Give each service the name you want but before 
+creating the service, ensure it is bound to the application you created earlier.
 
 ### Setting up the flow
 
@@ -73,9 +81,10 @@ Then the output of the function is sent to a split node followed by join node. T
 keywords into an array and the combine them into a string. However we need to configure split by adding 
 `\n` in the `split using` field. As for the join node, we have to use the manual mode and set the following
 paramenters:
-    combine each: `msg.payload.text`
-    te create: `a string`
-    joined suing: `, `
+    
+    combine each: msg.payload.text
+    to create: a string
+    joined using: , 
 
 After the join node, we have to save the content and then repeat the same procedure for the entities. To do
 so, first we connect a function with the following content to the output of the join:
