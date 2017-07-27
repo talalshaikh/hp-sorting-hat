@@ -1,0 +1,366 @@
+[
+    {
+        "id": "20f38308.a7f0cc",
+        "type": "http in",
+        "z": "ca83cb14.bb77c8",
+        "name": "http request",
+        "url": "/",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "c57d7e96.25f38"
+            ]
+        ]
+    },
+    {
+        "id": "af5620d5.74015",
+        "type": "http response",
+        "z": "ca83cb14.bb77c8",
+        "name": "http response",
+        "statusCode": "",
+        "headers": {},
+        "x": 500,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "c57d7e96.25f38",
+        "type": "template",
+        "z": "ca83cb14.bb77c8",
+        "name": "template",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "    <!DOCTYPE html>\n    <html lang=\"en\">\n\n    <head>\n        <meta charset=\"utf-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n        <title>Assembly Workshop</title>\n\n        <!-- Bootstrap -->\n        <link href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\" rel=\"stylesheet\">\n        <style>\n            .loader {\n                position: absolute;\n                z-index: 1;\n                width: 150px;\n                height: 150px;\n                border: 16px solid #f3f3f3;\n                border-radius: 50%;\n                border-top: 16px solid #3498db;\n                width: 120px;\n                height: 120px;\n                -webkit-animation: spin 2s linear infinite;\n                animation: spin 2s linear infinite;\n            }\n\n            @-webkit-keyframes spin {\n                0% {\n                    -webkit-transform: rotate(0deg);\n                }\n                100% {\n                    -webkit-transform: rotate(360deg);\n                }\n            }\n\n            @keyframes spin {\n                0% {\n                    transform: rotate(0deg);\n                }\n                100% {\n                    transform: rotate(360deg);\n                }\n            }\n        </style>\n    </head>\n\n    <body>\n        <div class=\"jumbotron\" style=\"background:black; text-align: center\">\n            <div style=\"color:white\">\n                <h1>Assembly Workshop</h1>\n                <h2>Assembly workshop on Natural Language Understanding and Natural Language Classifiers.</h2>\n            </div>\n        </div>\n        <div class=\"container mx-auto\" style=\"width:66%\">\n            <div class=\"row col-sm-offset-5 hidden\" style=\"height:150px\" id=\"loader\">\n                <div class=\"loader\"></div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-sm-offset-3 hidden\" id=\"results\" style=\"padding-left:1.5%;\">\n                    <!-- populate fields to diplay results -->\n                    <h3 id=\"main_result\"></h3>\n                    <div>Other results:</div>\n                    <div>\n                        <ul id=\"details\">\n                            \n                        </ul>            \n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"form-group col-sm-offset-3 col-sm-6\">\n                    <label for=\"textArea\" class=\"control-label\">What topics did you enjoy most at school?</label>\n                    <textarea class=\"form-control\" rows=\"9\" id=\"input\"></textarea>\n                    <span class=\"help-block\">Answer the above question in a short essay format and be as honest as you can. Based on your response the service will recommend which career suits you most.</span>\n                    <button class=\"btn btn-primary\" type=\"button\" id=\"submit\">Submit</button>\n                    </span>\n                </div>\n            </div>\n        </div>\n        </div>\n\n\n        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->\n        <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js\"></script>\n        <!-- Include all compiled plugins (below), or include individual files as needed -->\n        <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>\n\n        <script>\n            //fill with populated field \n            function populateFields(result) {\n                primary_result = result[\"top_class\"];\n                res_1 = result[\"classes\"][1]['class_name'];\n                per_1 = (result[\"classes\"][1]['confidence']*100).toFixed(2);\n                res_2 = result[\"classes\"][2]['class_name'];\n                per_2 = (result[\"classes\"][2]['confidence']*100).toFixed(2);\n                res_3 = result[\"classes\"][3]['class_name'];\n                per_3 = (result[\"classes\"][3]['confidence']*100).toFixed(2);\n\n                $('#details').empty();\n                $('#main_result').empty();\n                $('#results').removeClass('hidden');\n                $('#main_result').append(\"Results: \" + primary_result);\n                $('#details').append(\"<li>\"+res_1+\": \"+per_1+\"%</li>\");\n                $('#details').append(\"<li>\"+res_2+\": \"+per_2+\"%</li>\");\n                $('#details').append(\"<li>\"+res_3+\": \"+per_3+\"%</li>\");\n\n            }\n\n            function loading(ennable) {\n                if (ennable) {\n                    $('#loader').removeClass('hidden');\n                    $('#input').attr('disabled', \"\");\n                    $('#submit').prop('disabled', true);\n                } else {\n                    $('#loader').addClass('hidden');\n                    $('#input').removeAttr('disabled');\n                    $('#submit').prop('disabled', false);\n                }\n            }\n\n            function sendRequest(request) {\n                loading(true);\n                $.ajax({\n                    method: \"GET\",\n                    url: \"./api\",\n                    contentType: \"application/text\",\n                    data: { \"request\": request }\n                })\n                    .done(function (response) {\n                        populateFields(response);\n                        loading(false);\n                    });\n            }\n\n            $('#input').keydown(function (e) {\n                var data = $('#input').val();\n                if (e.which == 13 && data.length > 0) { //catch Enter key\n                    sendRequest(data);\n                }\n            });\n\n            $('#submit').click(function (e) {\n                var data = $('#input').val();\n                if (data.length > 0) {\n                    sendRequest(data);\n                }\n            });\n        </script>\n    </body>\n\n    </html>",
+        "output": "str",
+        "x": 320,
+        "y": 120,
+        "wires": [
+            [
+                "af5620d5.74015"
+            ]
+        ]
+    },
+    {
+        "id": "5c348049.2f9fc",
+        "type": "http in",
+        "z": "ca83cb14.bb77c8",
+        "name": "http request",
+        "url": "/api",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 340,
+        "wires": [
+            [
+                "be6fcc20.2c617",
+                "abfc679a.bbefb8"
+            ]
+        ]
+    },
+    {
+        "id": "bdc26221.762ba",
+        "type": "http response",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1770,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "a5ae0534.67b418",
+        "type": "natural-language-understanding",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "categories": false,
+        "concepts": false,
+        "maxconcepts": "5",
+        "doc-emotion": false,
+        "doc-emotion-target": "",
+        "doc-sentiment": false,
+        "doc-sentiment-target": "",
+        "entity": true,
+        "entity-emotion": false,
+        "entity-sentiment": false,
+        "maxentities": "20",
+        "keyword": true,
+        "keyword-emotion": false,
+        "keyword-sentiment": false,
+        "maxkeywords": "20",
+        "metadata": false,
+        "relation": false,
+        "semantic": false,
+        "semantic-entities": false,
+        "semantic-keywords": false,
+        "maxsemantics": "50",
+        "x": 540,
+        "y": 360,
+        "wires": [
+            [
+                "3985d6c1.bee59a",
+                "3fb826ab.a5d01a"
+            ]
+        ]
+    },
+    {
+        "id": "47edff14.9096b",
+        "type": "watson-natural-language-classifier",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "mode": "classify",
+        "language": "en",
+        "classifier": " ",
+        "x": 1550,
+        "y": 240,
+        "wires": [
+            [
+                "bdc26221.762ba",
+                "2298af23.374b9"
+            ]
+        ]
+    },
+    {
+        "id": "be6fcc20.2c617",
+        "type": "function",
+        "z": "ca83cb14.bb77c8",
+        "name": "get request",
+        "func": "msg.payload = msg.payload['request'];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 290,
+        "y": 400,
+        "wires": [
+            [
+                "a5ae0534.67b418"
+            ]
+        ]
+    },
+    {
+        "id": "fe765dd2.e43a7",
+        "type": "split",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 950,
+        "y": 240,
+        "wires": [
+            [
+                "d34049f1.4480b8"
+            ]
+        ]
+    },
+    {
+        "id": "d34049f1.4480b8",
+        "type": "join",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "mode": "custom",
+        "build": "string",
+        "property": "payload.text",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": ", ",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "x": 1070,
+        "y": 200,
+        "wires": [
+            [
+                "209f4a66.084d16",
+                "3f587b3d.673144"
+            ]
+        ]
+    },
+    {
+        "id": "209f4a66.084d16",
+        "type": "function",
+        "z": "ca83cb14.bb77c8",
+        "name": "entities",
+        "func": "msg.keywords = msg.payload;\nif(msg.features.entities.length>0){\n    msg.payload = msg.features.entities;   \n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 900,
+        "y": 380,
+        "wires": [
+            [
+                "e5725961.0d0368",
+                "cb68cfae.1e341"
+            ]
+        ]
+    },
+    {
+        "id": "e5725961.0d0368",
+        "type": "split",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1030,
+        "y": 340,
+        "wires": [
+            [
+                "f4f883a0.f2408"
+            ]
+        ]
+    },
+    {
+        "id": "f4f883a0.f2408",
+        "type": "join",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "mode": "custom",
+        "build": "string",
+        "property": "payload.text",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": ", ",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "x": 1150,
+        "y": 300,
+        "wires": [
+            [
+                "b6f0ebbc.8070d8"
+            ]
+        ]
+    },
+    {
+        "id": "b6f0ebbc.8070d8",
+        "type": "function",
+        "z": "ca83cb14.bb77c8",
+        "name": "join",
+        "func": "msg.entities = msg.payload;\nmsg.payload = msg.entities.text + \", \" + msg.keywords.text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1310,
+        "y": 240,
+        "wires": [
+            [
+                "47edff14.9096b",
+                "7bdea30e.740b1c"
+            ]
+        ]
+    },
+    {
+        "id": "3985d6c1.bee59a",
+        "type": "function",
+        "z": "ca83cb14.bb77c8",
+        "name": "keywords",
+        "func": "if(msg.features.keywords.length >0){\n    msg.payload = msg.features.keywords;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 780,
+        "y": 260,
+        "wires": [
+            [
+                "fe765dd2.e43a7",
+                "918926fb.e313e8"
+            ]
+        ]
+    },
+    {
+        "id": "2298af23.374b9",
+        "type": "debug",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1790,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "7bdea30e.740b1c",
+        "type": "debug",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1470,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "3f587b3d.673144",
+        "type": "debug",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1230,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "cb68cfae.1e341",
+        "type": "debug",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1130,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "918926fb.e313e8",
+        "type": "debug",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 930,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "3fb826ab.a5d01a",
+        "type": "debug",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "features",
+        "x": 810,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "abfc679a.bbefb8",
+        "type": "debug",
+        "z": "ca83cb14.bb77c8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 290,
+        "y": 280,
+        "wires": []
+    }
+]
