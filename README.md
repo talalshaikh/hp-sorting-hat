@@ -59,18 +59,25 @@ If you go through the index.html, you will notice and ajax request at line 108:
         data: {"request": request}
     })
 ```
-The url is a custom api we will be creating to perform our functionality. To start with, add another 
-HTTP request node and set the route to '/api'. Then add a function node and connect it to the output 
-of the request. In the function add the following piece of code which will place the user input to the 
-`msg.payload`:
+The url is a custom api we will be creating to perform our functionality. The front end UI should
+look like this:
+
+![Imgur](http://i.imgur.com/wkDroeX.png?1)
+
+To start with, add another HTTP request node and set the route to '/api'. Then add a function node 
+and connect it to the output of the request. In the function add the following piece of code which
+will place the user input to the `msg.payload`:
 ```javascript
 msg.payload = msg.payload['request'];
 return msg;
 ```
 Connect the output of the function to a Natural Language Understanding node and configure the node 
 to detect entities and keywords by ticking the relevant check boxes. This will allow us to caputure 
-only the necessary fields when the node places the results on `msg.features`. We then first extract 
-the keywords by adding a function node with the following content:
+only the necessary fields when the node places the results on `msg.features`. 
+
+![Imgur](http://i.imgur.com/GZnO5mE.png)
+
+We then first extract the keywords by adding a function node with the following content:
 ```javascript
 if(msg.features.keywords.length >0){
     msg.payload = msg.features.keywords;
@@ -103,9 +110,13 @@ msg.entities = msg.payload;
 msg.payload = msg.entities.text + ", " + msg.keywords.text;
 return msg;
 ```
+![Imgur](http://i.imgur.com/fEN4uba.png)
+
 The last few nodes are the Natural Language Classifier, followed by a function to set the 
-`msg.pyaload.top_class` on `msg.payload` and send it to an HTTP response. Deploying and attempting
+`msg.payload = msg.pyaload.top_class; return msg` and send it to an HTTP response. Deploying and attempting
 to run will produce an error becaus the NLC is not yet configured.
+
+![Imgur](http://i.imgur.com/dEKxL65.png)
 
 ### Natural Language Classifier
 To configure the NLC, head over to the service you created early on, and select the manage tab on 
@@ -118,3 +129,7 @@ at the top and copy the classifier ID into the node.
 When everything is complete, deploy the node red app and open the URL, type in a text the describes
 "What topics did you enjoy most at school". Clicking submit should show you the career path that
 would suit you most.
+
+![Imgur](http://i.imgur.com/oNniKIh.png)
+
+![Imgur](http://i.imgur.com/mesim9Q.png)
