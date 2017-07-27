@@ -110,7 +110,7 @@ msg.entities = msg.payload;
 msg.payload = msg.entities.text + ", " + msg.keywords.text;
 return msg;
 ```
-[Imgur](http://i.imgur.com/fEN4uba.png)
+![Imgur](http://i.imgur.com/fEN4uba.png)
 
 The last few nodes are the Natural Language Classifier, followed by a function to set the 
 `msg.payload = msg.pyaload.top_class; return msg` and send it to an HTTP response. Deploying and attempting
