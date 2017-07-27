@@ -1,136 +1,151 @@
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Assembly Workshop</title>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Assembly Workshop</title>
 
-    <!-- Bootstrap -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .loader {
-            position: absolute;
-            z-index: 1;
-            width: 150px;
-            height: 150px;
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #3498db;
-            width: 120px;
-            height: 120px;
-            -webkit-animation: spin 2s linear infinite;
-            animation: spin 2s linear infinite;
-        }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
+        <!-- Bootstrap -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .loader {
+                position: absolute;
+                z-index: 1;
+                width: 150px;
+                height: 150px;
+                border: 16px solid #f3f3f3;
+                border-radius: 50%;
+                border-top: 16px solid #3498db;
+                width: 120px;
+                height: 120px;
+                -webkit-animation: spin 2s linear infinite;
+                animation: spin 2s linear infinite;
             }
-            100% {
-                -webkit-transform: rotate(360deg);
-            }
-        }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
+            @-webkit-keyframes spin {
+                0% {
+                    -webkit-transform: rotate(0deg);
+                }
+                100% {
+                    -webkit-transform: rotate(360deg);
+                }
             }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
-</head>
 
-<body>
-    <div class="jumbotron" style="background:black; text-align: center">
-        <div style="color:white">
-            <h1>Assembly Workshop</h1>
-            <h2>Assembly worksop on Natural language understanding and Natural language classifiers.</h2>
-        </div>
-    </div>
-    <div class="container mx-auto" style="width:66%">
-        <div class="row col-sm-offset-5 hidden" style="height:150px" id="loader">
-            <div class="loader"></div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-offset-3 col-sm-6">
-                <label for="textArea" class="control-label">What topics did you enjoy most at school?</label>
-                <textarea class="form-control" rows="10" id="input"></textarea>
-                <span class="help-block">Answer the above question in a short essay format and be as honest as you can. Based on your response the service will recommend which career suits you most.</span>
-                <button class="btn btn-primary" type="button" id="submit">Submit</button>
-                </span>
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="jumbotron" style="background:black; text-align: center">
+            <div style="color:white">
+                <h1>Assembly Workshop</h1>
+                <h2>Assembly workshop on Natural Language Understanding and Natural Language Classifiers.</h2>
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-offset-4 hidden" id="results">
-            <!-- populate fields to diplay results -->
-            <h3 id="result">Results:</h3>
-            <div id="details"></div>
+        <div class="container mx-auto" style="width:66%">
+            <div class="row col-sm-offset-5 hidden" style="height:150px" id="loader">
+                <div class="loader"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-offset-3 hidden" id="results" style="padding-left:1.5%;">
+                    <!-- populate fields to diplay results -->
+                    <h3 id="main_result"></h3>
+                    <div>Other results:</div>
+                    <div>
+                        <ul id="details">
+                            
+                        </ul>            
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-offset-3 col-sm-6">
+                    <label for="textArea" class="control-label">What topics did you enjoy most at school?</label>
+                    <textarea class="form-control" rows="9" id="input"></textarea>
+                    <span class="help-block">Answer the above question in a short essay format and be as honest as you can. Based on your response the service will recommend which career suits you most.</span>
+                    <button class="btn btn-primary" type="button" id="submit">Submit</button>
+                    </span>
+                </div>
+            </div>
         </div>
-    </div>
-
-    </div>
+        </div>
 
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="static/antixss.js" type="text/javascript"></script>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <script>    
-        //fill with populated field 
-        function populateFields(result) {
-            $('#details').empty();
-            $('#details').append(result);
-            $('#results').removeClass('hidden');
-        }
+        <script>
+            //fill with populated field 
+            function populateFields(result) {
+                primary_result = result["top_class"];
+                res_1 = result["classes"][1]['class_name'];
+                per_1 = (result["classes"][1]['confidence']*100).toFixed(2);
+                res_2 = result["classes"][2]['class_name'];
+                per_2 = (result["classes"][2]['confidence']*100).toFixed(2);
+                res_3 = result["classes"][3]['class_name'];
+                per_3 = (result["classes"][3]['confidence']*100).toFixed(2);
 
-        function loading(ennable) {
-            if (ennable) {
-                $('#loader').removeClass('hidden');
-                $('#input').attr('disabled', "");
-                $('#submit').prop('disabled', true);
-            } else {
-                $('#loader').addClass('hidden');
-                $('#input').removeAttr('disabled');
-                $('#submit').prop('disabled', false);
+                $('#details').empty();
+                $('#main_result').empty();
+                $('#results').removeClass('hidden');
+                $('#main_result').append("Results: " + primary_result);
+                $('#details').append("<li>"+res_1+": "+per_1+"%</li>");
+                $('#details').append("<li>"+res_2+": "+per_2+"%</li>");
+                $('#details').append("<li>"+res_3+": "+per_3+"%</li>");
+
             }
-        }
 
-        function sendRequest(request) {
-            loading(true);
-            $.ajax({
-                method: "GET",
-                url: "./api",
-                contentType: "application/text",
-                data: {"request": request}
-            })
-                .done(function (response) {
-                    populateFields(response);
-                    loading(false);
-                });
-        }
-
-        $('#input').keydown(function (e) {
-            var data = $('#input').val();
-            if (e.which == 13 && data.length > 0) { //catch Enter key
-                sendRequest(data);
+            function loading(ennable) {
+                if (ennable) {
+                    $('#loader').removeClass('hidden');
+                    $('#input').attr('disabled', "");
+                    $('#submit').prop('disabled', true);
+                } else {
+                    $('#loader').addClass('hidden');
+                    $('#input').removeAttr('disabled');
+                    $('#submit').prop('disabled', false);
+                }
             }
-        });
 
-        $('#submit').click(function (e) {
-            var data = $('#input').val();
-            if (data.length > 0) {
-                sendRequest(data);
+            function sendRequest(request) {
+                loading(true);
+                $.ajax({
+                    method: "GET",
+                    url: "./api",
+                    contentType: "application/text",
+                    data: { "request": request }
+                })
+                    .done(function (response) {
+                        populateFields(response);
+                        loading(false);
+                    });
             }
-        });
-    </script>
-</body>
 
-</html>
+            $('#input').keydown(function (e) {
+                var data = $('#input').val();
+                if (e.which == 13 && data.length > 0) { //catch Enter key
+                    sendRequest(data);
+                }
+            });
+
+            $('#submit').click(function (e) {
+                var data = $('#input').val();
+                if (data.length > 0) {
+                    sendRequest(data);
+                }
+            });
+        </script>
+    </body>
+
+    </html>
