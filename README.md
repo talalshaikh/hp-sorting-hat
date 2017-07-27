@@ -130,6 +130,9 @@ When everything is complete, deploy the node red app and open the URL, type in a
 "What topics did you enjoy most at school". Clicking submit should show you the career path that
 would suit you most.
 
+You can import the complete flow from `flow.txt`, and the function content exist in relevant function
+files in this repository.
+
 ![Imgur](http://i.imgur.com/oNniKIh.png)
 
-![Imgur](http://i.imgur.com/mesim9Q.png)
+![Imgur](http://i.imgur.com/5cTDWM8.png)
