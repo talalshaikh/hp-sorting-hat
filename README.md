@@ -8,10 +8,6 @@ Bluemix with only a couple clicks. Try it out for yourself right now by clicking
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/ibmets/node-red-bluemix-starter.git)
 
-You can also see the sample working demo by changing your directory to 
-`assembly-nlu-nlc` and then using `bx app push` to push the code 
-to bluemix.
-
 ### How does this work?
 
 When you click the button, you are taken to Bluemix where you get a pick a name
