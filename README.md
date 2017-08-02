@@ -1,4 +1,4 @@
-Node-RED Bluemix Starter Application
+Harry Potter Sorting Hat in Bluemix Node Red
 ====================================
 
 ### Node-RED in IBM Bluemix
